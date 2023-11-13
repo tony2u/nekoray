@@ -323,12 +323,22 @@ target_sources(nekoray PRIVATE ${CMAKE_BINARY_DIR}/translations.qrc)
 
 # Target Link
 
-target_link_libraries(nekoray PRIVATE
+if (APPLE AND (${QT_VERSION_MAJOR} GREATER_EQUAL 6))
+    target_link_libraries(nekoray PRIVATE
         Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Svg
         Threads::Threads
         ${NKR_EXTERNAL_TARGETS}
         ${PLATFORM_LIBRARIES}
-)
+        "-framework Metal"
+    )
+else ()
+    target_link_libraries(nekoray PRIVATE
+        Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Svg
+        Threads::Threads
+        ${NKR_EXTERNAL_TARGETS}
+        ${PLATFORM_LIBRARIES}
+    )
+endif ()
 
 if (QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(nekoray)
