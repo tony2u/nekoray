@@ -1,11 +1,7 @@
-git clone https://github.com/MatsuriDayo/nekoray.git --recursive
-then replace these below files:
-1. CMakeLists.txt
-2. conanfile.txt/conanfile_qt5.txt/conanfile_qt64.txt
-3. docs\Build_Conan.md
-4. cmake\windows\windows.cmake
+git clone https://github.com/tony2u/nekoray.git --recursive
 
 Windows:
+using Visual Studio
 1. Preparation (only first time)
    conan profile detect --force
    copy C:\Users\tony2u\.conan2\profiles\default C:\Users\tony2u\.conan2\profiles\Windows.Release (modify compiler.cppstd in Windows.Release： compiler.cppstd=14 ===> compiler.cppstd=17, compiler=msvc)
@@ -15,28 +11,6 @@ Windows:
    cd build
    cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=.\generators\conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DQT_VERSION_MAJOR=6
    cmake --build . --config Release
-
-or using LLVM & MSVC Clang
-1. Preparation (only first time)
-   conan profile detect --force
-   copy C:\Users\tony2u\.conan2\profiles\default C:\Users\tony2u\.conan2\profiles\clang (confirm compiler and compiler.cppstd in clang： compiler.cppstd=17, compiler=clang)
-2. Build dependencies
-   set NOT_ON_C3I=1 & conan install . -b missing -pr clang
-3. Build nekoray
-   cd build
-   cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=.\Release\generators\conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=bcc64 -DCMAKE_CXX_COMPILER=bcc64 -DQT_VERSION_MAJOR=6
-   ninja all -j 4
-
-or using Embarcadero RadStudio
-1. Preparation (only first time)
-   conan profile detect --force
-   copy C:\Users\tony2u\.conan2\profiles\default C:\Users\tony2u\.conan2\profiles\bcc64 (confirm compiler and compiler.cppstd in bcc64： compiler.cppstd=17, compiler=clang)
-2. Build dependencies
-   set NOT_ON_C3I=1 & conan install . -b missing -pr bcc64
-3. Build nekoray
-   cd build
-   cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=.\Release\generators\conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=bcc64 -DCMAKE_CXX_COMPILER=bcc64 -DQT_VERSION_MAJOR=6
-   ninja all -j 4
 
 Linux:
 1. Preparation (only first time)
@@ -81,46 +55,12 @@ CMakeToolchain
 [layout]
 cmake_layout
 
-modified conan python file:
+patching to conan python file:
 ~/.local/lib/python3.9/site-packages/conan/tools/gnu/autotools.py
 def make(self, target=None, args=None):
 ...
-if jobs=="-j1":
-    jobs = ""
-
-modified source files:
-1. ~/Projects/nekoray/3rdparty/qjs/cutils.h
--#else
-+#elif !defined(__FreeBSD__)
-#include <alloca.h>
-#endif
-2. ~/Projects/nekoray/3rdparty/qjs/quickjs-libc.c
-参照：/usr/ports/lang/quickjs/files/patch-quickjs-libc.c
- #include <sys/ioctl.h>
- #include <sys/wait.h>
- 
--#if defined(__APPLE__)
-+#if defined(__FreeBSD__)
-+extern char **environ;
-+#endif
-+
-+#if defined(__APPLE__) || defined(__FreeBSD__)
- typedef sig_t sighandler_t;
-+#endif
-+#if defined(__APPLE__)
- #if !defined(environ)
- #include <crt_externs.h>
- #define environ (*_NSGetEnviron())
-3. ~/Projects/nekoray/sys/AutoRun.cpp
-+#ifdef Q_OS_FREEBSD
-+void AutoRun_SetEnabled(bool enable) {}
-+bool AutoRun_IsEnabled() { return false; }
-#endif
-4. ~/Projects/nekoray/3rdparty/qv2ray/v2/components/proxy/QvProxyConfigurator.cpp
-+#elif defined(Q_OS_FREEBSD)
-#endif
-+#elif defined(Q_OS_FREEBSD)
-#endif
++if jobs=="-j1":
++    jobs = ""
 
 1. Preparation (only first time)
    conan profile detect --force (only first time)

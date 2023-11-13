@@ -229,3 +229,8 @@ bool AutoRun_IsEnabled() {
 }
 
 #endif
+
+#ifdef Q_OS_FREEBSD
+void AutoRun_SetEnabled(bool enable) {}
+bool AutoRun_IsEnabled() { return false; }
+#endif

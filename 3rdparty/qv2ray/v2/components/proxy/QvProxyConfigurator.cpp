@@ -361,7 +361,7 @@ namespace Qv2ray::components::proxy {
         if (results.count(true) != actions.size()) {
             LOG("Something wrong when setting proxies.");
         }
-#else
+#elif defined(Q_OS_MACOS)
 
         for (const auto &service: macOSgetNetworkServices()) {
             LOG("Setting proxy for interface: " + service);
@@ -377,7 +377,7 @@ namespace Qv2ray::components::proxy {
                 QProcess::execute("/usr/sbin/networksetup", {"-setsocksfirewallproxy", service, address, QSTRN(socksPort)});
             }
         }
-
+#elif defined(Q_OS_FREEBSD)
 #endif
     }
 
@@ -426,7 +426,7 @@ namespace Qv2ray::components::proxy {
             DEBUG(QString("[%1] Program: %2, Args: %3").arg(returnCode).arg(action.first).arg(action.second.join(";")));
         }
 
-#else
+#elif defined(Q_OS_MACOS)
         for (const auto &service: macOSgetNetworkServices()) {
             LOG("Clearing proxy for interface: " + service);
             QProcess::execute("/usr/sbin/networksetup", {"-setautoproxystate", service, "off"});
@@ -434,7 +434,7 @@ namespace Qv2ray::components::proxy {
             QProcess::execute("/usr/sbin/networksetup", {"-setsecurewebproxystate", service, "off"});
             QProcess::execute("/usr/sbin/networksetup", {"-setsocksfirewallproxystate", service, "off"});
         }
-
+#elif defined(Q_OS_FREEBSD)
 #endif
     }
 } // namespace Qv2ray::components::proxy
