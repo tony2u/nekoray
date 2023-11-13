@@ -42,6 +42,10 @@ macOS:
    cmake --build .
 
 FreeBSD:
+install QT 6.5 on FreeBSD: pkg install qt6-base qt6-svg qt6-tools
+or
+install QT 5.15 on FreeBSD: pkg install qt5 qt5-linguist qt5-svg qt5-x11extras
+
 conanfile.txt
 [requires]
 protobuf/3.21.4
@@ -55,13 +59,6 @@ CMakeToolchain
 [layout]
 cmake_layout
 
-patching to conan python file:
-~/.local/lib/python3.9/site-packages/conan/tools/gnu/autotools.py
-def make(self, target=None, args=None):
-...
-+if jobs=="-j1":
-+    jobs = ""
-
 1. Preparation (only first time)
    conan profile detect --force (only first time)
    cp ~/.conan2/profiles/default ~/.conan2/profiles/FreeBSD.Release (confirm compiler.cppstd in FreeBSD.Release： compiler.cppstd=gnu17 or compiler.cppstd=17)
@@ -70,9 +67,9 @@ def make(self, target=None, args=None):
    tools.system.package_manager:sudo = True
 2. Build dependencies
     setenv NOT_ON_C3I 1
-    conan install conanfile_qt5.txt -b missing -pr FreeBSD.Release  #QT 5.15 on FreeBSD, qt5, qt5-linguist, qt5-svg, qt5-x11extras
+    conan install conanfile_qt5.txt -b missing -pr FreeBSD.Release  #QT 5.15 on FreeBSD
     or
-    conan install . -b missing -pr FreeBSD.Release -c tools.build:jobs=1 #QT 6.5 on FreeBSD, qt6-base, qt6-svg, qt6-tools
+    conan install . -b missing -pr FreeBSD.Release  #QT 6.5 on FreeBSD
 3. Build nekoray
    cd build
    cmake .. -DCMAKE_TOOLCHAIN_FILE=./Release/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DCMAKE_BUILD_TYPE=Release -DQT_VERSION_MAJOR=6
