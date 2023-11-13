@@ -42,9 +42,9 @@ macOS:
    cmake --build .
 
 FreeBSD:
-install QT 6.5 on FreeBSD: pkg install qt6-base qt6-svg qt6-tools
-or
-install QT 5.15 on FreeBSD: pkg install qt5 qt5-linguist qt5-svg qt5-x11extras
+>install QT 6.5 on FreeBSD: pkg install qt6-base qt6-svg qt6-tools
+>or
+>install QT 5.15 on FreeBSD: pkg install qt5 qt5-linguist qt5-svg qt5-x11extras
 
 conanfile.txt
 [requires]
