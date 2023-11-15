@@ -10,7 +10,7 @@ using Visual Studio
 3. Build nekoray
    cd build
    cmake .. -G "Visual Studio 17 2022" -DCMAKE_TOOLCHAIN_FILE=.\generators\conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DQT_VERSION_MAJOR=6
-   cmake --build . --config Release
+   cmake --build . --config Release --parallel
 
 Linux:
 1. Preparation (only first time)
@@ -22,7 +22,7 @@ Linux:
 3. Build nekoray
    cd build
    cmake .. -DCMAKE_TOOLCHAIN_FILE=./Release/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DCMAKE_BUILD_TYPE=Release -DQT_VERSION_MAJOR=6
-   cmake --build .
+   cmake --build . --parallel
 
 macOS:
 1. Preparation (only first time)
@@ -39,7 +39,7 @@ macOS:
    cmake .. -DCMAKE_TOOLCHAIN_FILE=./Release/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DCMAKE_BUILD_TYPE=Release -DQT_VERSION_MAJOR=5 #QT 5.15
    or
    cmake .. -DCMAKE_TOOLCHAIN_FILE=./Release/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DCMAKE_BUILD_TYPE=Release -DQT_VERSION_MAJOR=6 #QT 6.x
-   cmake --build .
+   cmake --build . --parallel
 
 FreeBSD:
 >install QT 6.5 on FreeBSD: pkg install qt6-base qt6-svg qt6-tools
@@ -73,4 +73,4 @@ cmake_layout
 3. Build nekoray
    cd build
    cmake .. -DCMAKE_TOOLCHAIN_FILE=./Release/generators/conan_toolchain.cmake -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_POLICY_DEFAULT_CMP0057=NEW -DCMAKE_BUILD_TYPE=Release -DQT_VERSION_MAJOR=6
-   cmake --build .
+   cmake --build . --parallel
